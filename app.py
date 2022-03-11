@@ -30,10 +30,18 @@ app.config['SECRET_KEY'] = 'do_not_touch_or_you_will_be_fired'
 
 # this function is used to format date to a finnish time format from database format
 # e.g. 2021-07-20 10:36:36 is formateed to 20.07.2021 klo 10:36
+# def format_date(post_date):
+#     isodate = post_date.replace(' ', 'T')
+#     newdate = datetime.fromisoformat(isodate)
+#     return newdate.strftime('%d.%m.%Y') + ' klo ' + newdate.strftime('%H:%M')
+
+# def format_date(post_date):
+#     isodate = post_date.replace(' ', 'T')
+#     newdate = datetime.fromisoformat(isodate)
+#     return newdate.strftime('%d.%m.%Y') + ' klo ' + newdate.strftime('%H:%M')
+
 def format_date(post_date):
-    isodate = post_date.replace(' ', 'T')
-    newdate = datetime.fromisoformat(isodate)
-    return newdate.strftime('%d.%m.%Y') + ' klo ' + newdate.strftime('%H:%M')
+    return post_date
 
 
 # this index() gets executed on the front page where all the posts are
@@ -104,7 +112,7 @@ def edit(id):
 def delete(id):
     post = get_post(id)
     conn = get_db_connection()
-    conn.execute('DELETE FROM posts')
+    conn.execute('DELETE FROM posts WHERE id = {}'.format(id))
     conn.commit()
     conn.close()
     flash('"{}" was successfully deleted!'.format(post['title']))
